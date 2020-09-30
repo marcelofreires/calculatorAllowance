@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Calculator Allowance</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.1/css/bulma.min.css" rel="stylesheet">
+  <link href="libs/bulma.min.css" rel="stylesheet">
+  <script src="libs/vanilla-masker.min.js"></script>
 </head>
 <body>
   <section class="hero is-dark" style="min-height: 100vh;">
@@ -34,41 +35,48 @@
     </div>
   </section>
   <script>
+    const hourMask = '99:99';
+    const minutesMask = '99';
+
+    VMasker(hourMinutesInput).maskPattern(hourMask);
+    VMasker(minutesInput).maskPattern(minutesMask);
+
     const numberPadStart = (numberValue) => (
       String(numberValue).padStart(2, 0)
-    )
+    );
 
     const handleSubmit = () => {
       this.event.preventDefault();
 
-      const hourMinutesInputValue = document.getElementById('hourMinutesInput').value
-      const minutesInputValue = document.getElementById('minutesInput').value || 48
+      const hourMinutesInputValue = document.getElementById('hourMinutesInput').value;
+      const minutesInputValue = document.getElementById('minutesInput').value || 48;
 
-      const resultCalculatorAllowance = calculatorAllowance(hourMinutesInputValue, minutesInputValue)
+      const resultCalculatorAllowance = calculatorAllowance(hourMinutesInputValue, minutesInputValue);
 
       if (resultCalculatorAllowance) {
-        const resultHTML = document.getElementById('result')
+        const resultHTML = document.getElementById('result');
 
         resultHTML.innerHTML = `
           <h2 class="title">Hora Calculada</h2>
           <span class="tag is-success is-medium">${resultCalculatorAllowance}</span>
-        `
+        `;
       }
     }
 
     const calculatorAllowance = (hourMinutes, minutes = 48) => {
-      let hour = Number(hourMinutes.split(':')[0])
-      let minutesOfHour = Number(hourMinutes.split(':')[1])
-      const totalMinutes = minutesOfHour + minutes
+      let hour = Number(hourMinutes.split(':')[0]);
+      let minutesOfHour = Number(hourMinutes.split(':')[1]);
+      const totalMinutes = minutesOfHour + Number(minutes);
+
 
       if (totalMinutes >= 60) {
-        hour+=1
-        minutesOfHour = totalMinutes - 60
+        hour+=1;
+        minutesOfHour = totalMinutes - 60;
       } else {
-        minutesOfHour = totalMinutes
+        minutesOfHour = totalMinutes;
       }
 
-      return `${numberPadStart(hour)}:${numberPadStart(minutesOfHour)}`
+      return `${numberPadStart(hour)}:${numberPadStart(minutesOfHour)}`;
     }
   </script>
 </body>
