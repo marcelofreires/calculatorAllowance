@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculator Allowance</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.1/css/bulma.min.css" rel="stylesheet">
+</head>
+<body>
+  <section class="hero is-dark" style="min-height: 100vh;">
+    <div class="hero-body">
+      <div class="container" style="display: flex; align-items: center; justify-content: center;">
+        <div>
+          <h1 class="title">
+            Calcular abono
+          </h1>
+          <div class="field">
+            <label class="label" style="color: white">Adicionar hora de saída</label>
+            <div class="control">
+              <input id="hourMinutesInput" class="input" type="text" placeholder="hh:mm">
+            </div>
+          </div>
+          <div class="field">
+            <label class="label" style="color: white">Adicionar minutos que serão abonados</label>
+            <div class="control">
+              <input id="minutesInput" class="input" type="number" placeholder="48">
+            </div>
+          </div>
+          <button class="button is-primary" onclick="handleSubmit(this)">Calcular</button>
+          <div class="content mt-5" id="result">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script>
+    const numberPadStart = (numberValue) => (
+      String(numberValue).padStart(2, 0)
+    )
+
+    const handleSubmit = () => {
+      this.event.preventDefault();
+
+      const hourMinutesInputValue = document.getElementById('hourMinutesInput').value
+      const minutesInputValue = document.getElementById('minutesInput').value || 48
+
+      const resultCalculatorAllowance = calculatorAllowance(hourMinutesInputValue, minutesInputValue)
+
+      if (resultCalculatorAllowance) {
+        const resultHTML = document.getElementById('result')
+
+        resultHTML.innerHTML = `
+          <h2 class="title">Hora Calculada</h2>
+          <span class="tag is-success is-medium">${resultCalculatorAllowance}</span>
+        `
+      }
+    }
+
+    const calculatorAllowance = (hourMinutes, minutes = 48) => {
+      let hour = Number(hourMinutes.split(':')[0])
+      let minutesOfHour = Number(hourMinutes.split(':')[1])
+      const totalMinutes = minutesOfHour + minutes
+
+      if (totalMinutes >= 60) {
+        hour+=1
+        minutesOfHour = totalMinutes - 60
+      } else {
+        minutesOfHour = totalMinutes
+      }
+
+      return `${numberPadStart(hour)}:${numberPadStart(minutesOfHour)}`
+    }
+  </script>
+</body>
+</html>
